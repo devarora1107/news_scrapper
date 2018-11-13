@@ -1,19 +1,21 @@
 import tweepy
 import csv
 import pandas as pd
+import os
+import apiConfig
+api=apiConfig.get_config()
+global searchItem
+searchItem='unity'
 ####input your credentials here
-consumer_key = 'fX4iGd2OTOMsP94eEf1yq3KBv'
-consumer_secret = '3dEjoDFPl5cmqgbeyH3wsjEC2MkywgT1IS7RSJC1ZcBFOyBrPo'
-access_token = '1058740982081077253-BwKpwkilxzEJmKKLCtq4nH4VKAhmyJ'
-access_token_secret = 'lI04JwX6YiDF2zxlsuX8T9r7cx6Eg12atvg3XXRbqP4vk'
 
-auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(access_token, access_token_secret)
-api = tweepy.API(auth,wait_on_rate_limit=True)
 #####United Airlines
 # Open/Create a file to append data
-csvFile = open('ua.csv', 'a')
-csvHashtag=open('hashtag.csv','a')
+try:
+    os.mkdir(searchItem)
+except:
+    os.mkdir(searchItem+' new')
+csvFile = open(searchItem+'/usageHashtag.csv', 'a')
+csvHashtag=open(searchItem+'/hashtag.csv','a')
 #Use csv Writer
 csvWriter = csv.writer(csvFile)
 csvHashtagWriter=csv.writer(csvHashtag)
@@ -41,7 +43,7 @@ def parseTextHashtags(text):
         sortHashtag(hashtag)
     return result
 
-for tweet in tweepy.Cursor(api.search,q="#cbi",count=100,
+for tweet in tweepy.Cursor(api.search,q=searchItem,count=100,
                            lang="en",
                            since="2018-11-03").items():
     #print (tweet.created_at, tweet.text)
