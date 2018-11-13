@@ -5,17 +5,17 @@ import os
 import apiConfig
 api=apiConfig.get_config()
 global searchItem
-searchItem='unity'
+searchItem='RBI'
 ####input your credentials here
 
 #####United Airlines
 # Open/Create a file to append data
 try:
-    os.mkdir(searchItem)
+    os.mkdir('data/'+searchItem)
 except:
-    os.mkdir(searchItem+' new')
-csvFile = open(searchItem+'/usageHashtag.csv', 'a')
-csvHashtag=open(searchItem+'/hashtag.csv','a')
+    os.mkdir('data/'+searchItem+' new')
+csvFile = open('data/'+searchItem+'/usageHashtag.csv', 'a')
+csvHashtag=open('data/'+searchItem+'/hashtag.csv','a')
 #Use csv Writer
 csvWriter = csv.writer(csvFile)
 csvHashtagWriter=csv.writer(csvHashtag)
