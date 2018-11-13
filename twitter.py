@@ -5,7 +5,7 @@ import os
 import apiConfig
 api=apiConfig.get_config()
 global searchItem
-searchItem='unity'
+searchItem='cbi'
 ####input your credentials here
 
 #####United Airlines
@@ -54,26 +54,38 @@ def parseLinkDetails(text):
         except:
             pass
     return result
-def parseTextHashtags(text):
-    result=[]
+def parseTweets(text):
+    hashtags=[]
+    userDetails=[]
+    linkDetails=[]
     text=text.split(' ')
     for t in text:
+        
         try:
             if(t[0]=='#'):
-                result.append(t)
+                hashtags.append(t)
+            elif(t[0]=='@'):
+                userDetails.append(t)
+                
+            elif(t[0:4]=='http'):
+
+                
+                linkDetails.append(t)
+            else:
+                pass
         except:
             pass
-    for hashtag in result:
+    for hashtag in hashtags:
         sortHashtag(hashtag)
-    return result
+    return [hashtags,userDetails,linkDetails]
 
 for tweet in tweepy.Cursor(api.search,q=searchItem,count=100,lang="en",since="2018-11-11").items():
-    print (tweet.created_at, tweet.text)
-    parseHashTags=parseTextHashtags(tweet.text.encode('utf-8'))
-    parseUser=parseUserDetails(tweet.text.encode('utf-8'))
-    parseLink=parseLinkDetails(tweet.text.encode('utf-8'))
-    
-    csvWriter.writerow([tweet.created_at, tweet.text.encode('utf-8'),parseHashTags,parseUser,parseLink] )
+    #print (tweet.created_at, tweet.text)
+    #parseHashTags=parseTweets(tweet.text.encode('utf-8'))
+    #parseUser=parseUserDetails(tweet.text.encode('utf-8'))
+    #parseLink=parseLinkDetails(tweet.text.encode('utf-8'))
+    result=parseTweets(tweet.text)
+    csvWriter.writerow([tweet.created_at, tweet.text.encode('utf-8'),result[0],result[1],result[2]] )
 
     ##print tweet.text.encode('utf-8')
 
